@@ -56,32 +56,9 @@ import React, { useRef } from 'react';
 import '../App.css'
 import Todo from '../Components/Todo';
 import TodoForm from '../Components/TodoForm';
-import EditTodoForm from '../Components/editForm'
-import useDoubleClick from "use-double-click"
+import EditTodoForm from '../Components/editForm';
 
 // let obj
-
-
-const List = ({ onDouble, obj, removeTodo }) => {
-    console.log(obj, 'this onject')
-    const buttonRef = useRef()
-
-    useDoubleClick({
-        onDoubleClick: () => {
-            onDouble(obj)
-        },
-        ref: buttonRef
-    })
-
-    // return <p ref={buttonRef}>{obj.text}</p>
-    return <div>
-        <li ref={buttonRef} className="todo-list"
-        >
-            {obj.text}
-        </li>
-        <button className="btn-todo" onClick={removeTodo}>X</button>
-    </div>
-}
 
 class TodoList extends React.Component {
     state = {
@@ -110,21 +87,29 @@ class TodoList extends React.Component {
         // console.log(event)
     }
 
+    editChangeHandler = (event) => {
+        this.setState({
+            editIndex: {
+                ...this.state.editIndex,
+                text: event.target.value
+            }
+        })
+        console.log(console.log(this.state.editIndex, 'ind'))
+    }
 
-    // doubleClick = (event,) => {
-    //     console.log(event, 'double')
-    //     obj = event.target.innerHTML
-    //     this.setState({
-    //         isEdit: !this.state.isEdit,
-    //         editIndex: event.target.innerHTML
-    //     })
-    //     console.log(event)
-    // }
+    editSubmit = () => {
+        const newData = this.state.todos.map((val, index) => {
+            if (index === this.state.idEdit) {
+                return this.state.editIndex
+            }
 
-    removeTodo = (event) => {
-        console.log(event)
-        const remove = this.state.todos.splice(event, 1)
-        this.setState({ remove })
+            return val
+        })
+        this.setState({
+            todos: newData,
+            newValue: '',
+            isEdit: false
+        })
     }
 
     handleSubmit = (event) => {
@@ -136,41 +121,20 @@ class TodoList extends React.Component {
         })
     }
 
-
+    removeTodo = (event) => {
+        console.log(event)
+        const remove = this.state.todos.splice(event, 1)
+        this.setState({ remove })
+    }
 
 
     render() {
         return (
             <div>
                 {this.state.isEdit ? <EditTodoForm
-                    onSubmit={() => {
-                        console.log(this.state.editIndex, 'ind')
-                        // const testData = 'halo'
-                        const newData = this.state.todos.map((val, index) => {
-                            if (index === this.state.idEdit) {
-                                return this.state.editIndex
-                            }
-
-                            return val
-                        })
-                        this.setState({
-                            todos: newData,
-                            newValue: '',
-                            isEdit: false
-                        })
-                    }}
+                    onSubmit={this.editSubmit}
                     onValue={this.state.editIndex.text}
-                    // onValue={obj}
-
-                    editChange={(e) => {
-                        this.setState({
-                            editIndex: {
-                                ...this.state.editIndex,
-                                text: e.target.value
-                            }
-                        })
-                        console.log(console.log(this.state.editIndex, 'ind'))
-                    }}
+                    editChange={this.editChangeHandler}
                 /> :
                     <TodoForm
                         onSubmit={this.handleSubmit}
@@ -188,7 +152,7 @@ class TodoList extends React.Component {
                             onDoubleClick={this.doubleClick}
                             removeTodo={() => this.removeTodo(index)}
                         /> */}
-                        <List
+                        <Todo
                             onDouble={(data) => {
                                 console.log(index, 'i')
                                 this.setState({

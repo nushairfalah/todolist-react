@@ -35,16 +35,28 @@
 // }
 
 // export default Todo
+import React, { useRef } from 'react';
 import '../App.css'
-function Todo(props) {
+import useDoubleClick from 'use-double-click';
+
+const Todo = ({ onDouble, obj, removeTodo }) => {
+    console.log(obj, 'this onject')
+    const buttonRef = useRef()
+
+    useDoubleClick({
+        onDoubleClick: () => {
+            onDouble(obj)
+        },
+        ref: buttonRef
+    })
+
+    // return <p ref={buttonRef}>{obj.text}</p>
     return (
         <div>
-            <li className="todo-list"
-                onDoubleClick={props.onDoubleClick}
-            >
-                {props.todo.text}
+            <li ref={buttonRef} className="todo-list">
+                {obj.text}
             </li>
-            <button className="btn-todo" onClick={props.removeTodo}>X</button>
+            <button className="btn-todo" onClick={removeTodo}>X</button>
         </div>
     )
 }
