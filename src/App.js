@@ -18,10 +18,23 @@ import TodoList from './Components/TodoList';
 
 class App extends React.Component {
 
+  // state = {
+  //   showTodoList: false
+  // }
+
+  // toggleButton = (event) => {
+  //   console.log(event)
+  //   event.preventDefault();
+  //   this.setState({
+  //     showTodoList: !this.state.showTodoList
+  //   })
+  // }
+
   render() {
     return (
       <div className='App'>
-        <h1>Bucket List</h1>
+        {/* <button className='button' onClick={this.toggleButton}>{this.state.showTodoList ? "Hide" : "Show"}</button>
+        {this.state.showTodoList && <TodoList />} */}
         <TodoList />
       </div>
     )

@@ -39,12 +39,12 @@ import '../App.css'
 function Todo(props) {
     return (
         <div>
-            <p className="todo-list"
+            <li className="todo-list"
                 onDoubleClick={props.onDoubleClick}
             >
                 {props.todo.text}
-            </p>
-            <button className="btn" onClick={props.removeTodo}>X</button>
+            </li>
+            <button className="btn-todo" onClick={props.removeTodo}>X</button>
         </div>
     )
 }

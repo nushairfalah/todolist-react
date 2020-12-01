@@ -52,20 +52,46 @@
 
 // export default TodoList
 
-import React from 'react';
+import React, { useRef } from 'react';
 import '../App.css'
 import Todo from '../Components/Todo';
 import TodoForm from '../Components/TodoForm';
 import EditTodoForm from '../Components/editForm'
+import useDoubleClick from "use-double-click"
 
-let obj
+// let obj
+
+
+const List = ({ onDouble, obj, removeTodo }) => {
+    console.log(obj, 'this onject')
+    const buttonRef = useRef()
+
+    useDoubleClick({
+        onDoubleClick: () => {
+            onDouble(obj)
+        },
+        ref: buttonRef
+    })
+
+    // return <p ref={buttonRef}>{obj.text}</p>
+    return <div>
+        <li ref={buttonRef} className="todo-list"
+        >
+            {obj.text}
+        </li>
+        <button className="btn-todo" onClick={removeTodo}>X</button>
+    </div>
+}
 
 class TodoList extends React.Component {
     state = {
-        todos: [],
+        todos: [
+            { text: 'List 1' }, { text: 'List 2' }, { text: 'List 3' },
+        ],
         newValue: '',
         isEdit: false,
-        editIndex: null,
+        editIndex: {},
+        idEdit: {}
     }
 
     setTodos = (event) => this.setState({ todos: event });
@@ -84,29 +110,16 @@ class TodoList extends React.Component {
         // console.log(event)
     }
 
-    editChangeHandler = (event) => {
-        const edit = event.target.value
-        this.setState({
-            editIndex: edit
-        })
-    }
 
-    editTerusss = (event) => {
-        event.preventDefault();
-        const editedTodos = this.state.todos
-        editedTodos[this.state.editIndex].todos = this.state.newValue
-        this.setState({
-            todos: editedTodos, isEdit: false, newValue: ''
-        })
-    }
-
-    doubleClick = (event) => {
-        obj = event.target.innerHTML
-        this.setState({
-            isEdit: !this.state.isEdit
-        })
-        console.log(event)
-    }
+    // doubleClick = (event,) => {
+    //     console.log(event, 'double')
+    //     obj = event.target.innerHTML
+    //     this.setState({
+    //         isEdit: !this.state.isEdit,
+    //         editIndex: event.target.innerHTML
+    //     })
+    //     console.log(event)
+    // }
 
     removeTodo = (event) => {
         console.log(event)
@@ -126,14 +139,38 @@ class TodoList extends React.Component {
 
 
 
-
     render() {
         return (
             <div>
                 {this.state.isEdit ? <EditTodoForm
-                    onSubmit={this.editTerusss}
-                    onValueChange={this.editChangeHandler}
-                    onValue={obj}
+                    onSubmit={() => {
+                        console.log(this.state.editIndex, 'ind')
+                        // const testData = 'halo'
+                        const newData = this.state.todos.map((val, index) => {
+                            if (index === this.state.idEdit) {
+                                return this.state.editIndex
+                            }
+
+                            return val
+                        })
+                        this.setState({
+                            todos: newData,
+                            newValue: '',
+                            isEdit: false
+                        })
+                    }}
+                    onValue={this.state.editIndex.text}
+                    // onValue={obj}
+
+                    editChange={(e) => {
+                        this.setState({
+                            editIndex: {
+                                ...this.state.editIndex,
+                                text: e.target.value
+                            }
+                        })
+                        console.log(console.log(this.state.editIndex, 'ind'))
+                    }}
                 /> :
                     <TodoForm
                         onSubmit={this.handleSubmit}
@@ -145,11 +182,23 @@ class TodoList extends React.Component {
 
                 {this.state.todos.map((todo, index) => (
                     <div key={index}>
-                        <Todo
+                        {/* <Todo
+
                             todo={todo}
                             onDoubleClick={this.doubleClick}
                             removeTodo={() => this.removeTodo(index)}
-                        />
+                        /> */}
+                        <List
+                            onDouble={(data) => {
+                                console.log(index, 'i')
+                                this.setState({
+                                    editIndex: data,
+                                    isEdit: !this.state.isEdit,
+                                    idEdit: index
+                                })
+                            }}
+                            obj={todo}
+                            removeTodo={() => this.removeTodo(index)} />
                     </div>
                 ))}
             </div>
