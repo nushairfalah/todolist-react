@@ -37,7 +37,7 @@ import '../App.css'
 function TodoForm(props) {
     return (
         <div>
-            <h1>Bucket List</h1>
+            <h1>Todo List</h1>
             <form className="form-todo" onSubmit={props.onSubmit}>
                 <input type="text" placeholder="type here..."
                     value={props.onValue}

@@ -39,8 +39,8 @@ import React, { useRef } from 'react';
 import '../App.css'
 import useDoubleClick from 'use-double-click';
 
-const Todo = ({ onDouble, obj, removeTodo }) => {
-    console.log(obj, 'this onject')
+const Todo = ({ onDouble, obj, removeTodos }) => {
+    // console.log(obj, 'this object')
     const buttonRef = useRef()
 
     useDoubleClick({
@@ -56,7 +56,7 @@ const Todo = ({ onDouble, obj, removeTodo }) => {
             <li ref={buttonRef} className="todo-list">
                 {obj.text}
             </li>
-            <button className="btn-todo" onClick={removeTodo}>X</button>
+            <button className="btn-todo" onClick={removeTodos}>X</button>
         </div>
     )
 }

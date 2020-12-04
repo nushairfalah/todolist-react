@@ -52,7 +52,7 @@
 
 // export default TodoList
 
-import React, { useRef } from 'react';
+import React from 'react';
 import '../App.css'
 import Todo from '../Components/Todo';
 import TodoForm from '../Components/TodoForm';
@@ -62,22 +62,20 @@ import EditTodoForm from '../Components/editForm';
 
 class TodoList extends React.Component {
     state = {
-        todos: [
-            { text: 'List 1' }, { text: 'List 2' }, { text: 'List 3' },
-        ],
+        todos: [],
         newValue: '',
         isEdit: false,
         editIndex: {},
         idEdit: {}
     }
 
-    setTodos = (event) => this.setState({ todos: event });
-
     addTodo = (event) => {
         const newTodos = this.state.todos.concat({ text: event })
         this.setTodos(newTodos)
         console.log(newTodos)
     };
+
+    setTodos = (event) => this.setState({ todos: event });
 
     changeHandler = (event) => {
         const todo = event.target.value
@@ -99,6 +97,7 @@ class TodoList extends React.Component {
 
     editSubmit = () => {
         const newData = this.state.todos.map((val, index) => {
+            console.log(val, 'val')
             if (index === this.state.idEdit) {
                 return this.state.editIndex
             }
@@ -147,14 +146,14 @@ class TodoList extends React.Component {
                 {this.state.todos.map((todo, index) => (
                     <div key={index}>
                         {/* <Todo
-
                             todo={todo}
                             onDoubleClick={this.doubleClick}
                             removeTodo={() => this.removeTodo(index)}
                         /> */}
                         <Todo
                             onDouble={(data) => {
-                                console.log(index, 'i')
+                                console.log(data, '<--Data')
+                                console.log(index, '<--index')
                                 this.setState({
                                     editIndex: data,
                                     isEdit: !this.state.isEdit,
@@ -162,7 +161,7 @@ class TodoList extends React.Component {
                                 })
                             }}
                             obj={todo}
-                            removeTodo={() => this.removeTodo(index)} />
+                            removeTodos={() => this.removeTodo(index)} />
                     </div>
                 ))}
             </div>
